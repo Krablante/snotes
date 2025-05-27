@@ -1,5 +1,5 @@
 // src/components/Sidebar.tsx
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react'; // <--- Added useState
 import { useAllSpaces, Space } from '../hooks/useAllSpaces';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -43,6 +43,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const [isEditing, setIsEditing] = useState(false); // <--- Added this line
   const { user } = useAuth();
   const { spaces, loading } = useAllSpaces();
   const navigate = useNavigate();
@@ -52,7 +53,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const handleAdd = async (parentId: string | null) => {
     const title = window.prompt('Название нового пространства:');
     if (!title || !user) return;
-    // вот добавили выбор шаблона:
     const isDated = window.confirm(
       'Использовать список по датам? OK — да (dated), Cancel — простой список (plain).'
     );
@@ -68,12 +68,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const handleDelete = async (spaceId: string) => {
     if (!window.confirm('Удалить это пространство и все его дочерние?')) return;
-    // Удаляем документ. Firestore каскадно не удалит детей автоматически,
-    // их можно удалить вручную или через функцию Cloud Function,
-    // здесь просто удаляем выбранный узел.
     await deleteDoc(doc(db, 'spaces', spaceId));
   };
 
+  // рендер узла (оставляем manageBtn обычным)
   const renderNode = (node: TreeNode, parentId: string | null) => (
     <li key={node.id}>
       <div className={styles.node}>
@@ -86,20 +84,25 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         >
           {node.title}
         </span>
-        <button
-          className={styles.manageBtn}
-          title="Добавить подпространство"
-          onClick={() => handleAdd(node.id)}
-        >
-          +
-        </button>
-        <button
-          className={styles.manageBtn}
-          title="Удалить пространство"
-          onClick={() => handleDelete(node.id)}
-        >
-          ✕
-        </button>
+        {/* показываем только в режиме редактирования */}
+        {isEditing && (
+          <>
+            <button
+              className={styles.manageBtn}
+              title="Добавить подпространство"
+              onClick={() => handleAdd(node.id)}
+            >
+              +
+            </button>
+            <button
+              className={styles.manageBtn}
+              title="Удалить пространство"
+              onClick={() => handleDelete(node.id)}
+            >
+              ✕
+            </button>
+          </>
+        )}
       </div>
       {node.children.length > 0 && (
         <ul className={styles.sublist}>
@@ -114,12 +117,22 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <div className={styles.sidebarOverlay} onClick={onClose}>
-      <div className={styles.sidebar} onClick={e => e.stopPropagation()}>
-        <button className={styles.closeBtn} onClick={onClose}>✕</button>
+      <div
+        className={`${styles.sidebar} ${isOpen ? styles.open : ''} ${isEditing ? styles.editing : ''}`}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* New Header with Edit and Close buttons */}
+        <div className={styles.header}>
+          <button onClick={() => setIsEditing(!isEditing)} className={styles.editBtn} title={isEditing ? "Завершить редактирование" : "Редактировать пространства"}>
+            {isEditing ? '✓' : '✎'} {/* Changed icon for better UX */}
+          </button>
+          <button className={styles.closeBtn} onClick={onClose}>✕</button>
+        </div>
+        {/* Manager Header for adding root space */}
         <div className={styles.managerHeader}>
           <button
             onClick={() => handleAdd(null)}
-            className={styles.manageBtn}
+            className={styles.manageBtn} // This class might need styling if used for a larger button
             title="Добавить корневое пространство"
           >
             + Корневое пространство

@@ -15,6 +15,7 @@ import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { useSpaces, Space } from '../hooks/useSpaces';
 import { useSpace } from '../hooks/useSpace';
+import styles from './SpaceView.module.css';
 
 // helper: format 'YYYY-MM-DD' to 'DD.MM.YYYY'
 const formatDate = (iso: string) => {
@@ -101,14 +102,14 @@ export default function SpaceView() {
   if (error) return <div>Ошибка: {error}</div>;
 
   return (
-    <div>
-      <button onClick={() => navigate(-1)}>← Назад</button>
+    <div className={styles.container}>
+      <button className={styles.back} onClick={() => navigate(-1)}>← Назад</button>
 
       {/* child spaces */}
       {childSpaces.length > 0 && (
-        <div>
+        <div className={styles.childList}>
           {childSpaces.map((s: Space) => (
-            <div key={s.id} onClick={() => navigate(`/space/${s.id}`)}>
+            <div key={s.id} className={styles.childItem} onClick={() => navigate(`/space/${s.id}`)}>
               {s.title}
             </div>
           ))}
@@ -116,22 +117,23 @@ export default function SpaceView() {
       )}
 
       {/* plain template */}
-      {template === 'plain' && (
+      {template === 'plain' && !hasChildren && (
         <>
-          <form onSubmit={e => { e.preventDefault(); addItem(); }}>
+          <form className={styles.form} onSubmit={e => { e.preventDefault(); addItem(); }}>
             <input
+              className={styles.input}
               type="text"
               value={newText}
               onChange={e => setNewText(e.target.value)}
               placeholder="type smth"
             />
-            <button type="submit">+</button>
+            <button className={styles.button} type="submit">+</button>
           </form>
-          <ul>
+          <ul className={styles.list}>
             {items.map(it => (
-              <li key={it.id}>
-                {it.text}
-                <button onClick={() => deleteItem(it.id)}>✕</button>
+              <li className={styles.item} key={it.id}>
+                <span>{it.text}</span>
+                <button className={styles.delete} onClick={() => deleteItem(it.id)}>✕</button>
               </li>
             ))}
           </ul>
@@ -141,30 +143,32 @@ export default function SpaceView() {
       {/* dated template */}
       {template === 'dated' && !hasChildren && (
         <>
-          <form onSubmit={e => { e.preventDefault(); addItem(); }}>
+          <form className={styles.form} onSubmit={e => { e.preventDefault(); addItem(); }}>
             <input
+              className={styles.inputDate}
               type="date"
               value={newDate}
               onChange={e => setNewDate(e.target.value)}
             />
             <input
+              className={styles.input}
               type="text"
               value={newText}
               onChange={e => setNewText(e.target.value)}
               placeholder="type smth"
             />
-            <button type="submit">+</button>
+            <button className={styles.button} type="submit">+</button>
           </form>
           {Object.entries(grouped)
             .sort((a, b) => b[0].localeCompare(a[0]))
             .map(([dateKey, list]) => (
-              <div key={dateKey}>
-                <h3>{formatDate(dateKey)}</h3>
-                <ul>
+              <div className={styles.group} key={dateKey}>
+                <h3 className={styles.groupTitle}>{formatDate(dateKey)}</h3>
+                <ul className={styles.list}>
                   {list.map(it => (
-                    <li key={it.id}>
-                      {it.text}
-                      <button onClick={() => deleteItem(it.id)}>✕</button>
+                    <li className={styles.item} key={it.id}>
+                      <span>{it.text}</span>
+                      <button className={styles.delete} onClick={() => deleteItem(it.id)}>✕</button>
                     </li>
                   ))}
                 </ul>
