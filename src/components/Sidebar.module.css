@@ -1,87 +1,64 @@
-/* Sidebar.module.css */
-
 .sidebarOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.7);
   z-index: 10;
 }
-
 .sidebar {
   position: relative;
   width: 300px;
   max-width: 80%;
-  background: #fff;
+  background: var(--surface);
   height: 100%;
   overflow-y: auto;
-  padding: 1rem;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+  padding: var(--gap);
+  box-shadow: var(--shadow);
 }
-
+.closeBtn, .editBtn, .manageBtn {
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+}
 .closeBtn {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background: none;
-  border: none;
   font-size: 1.2rem;
-  cursor: pointer;
 }
-
 .header {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--gap);
 }
-
-.editBtn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
 .managerHeader {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--gap);
 }
-
 .rootList,
 .sublist {
   list-style: none;
   padding-left: 0;
   margin: 0.5rem 0;
 }
-
 .sublist {
   padding-left: 1rem;
 }
-
 .node {
   padding: 0.5rem 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: var(--text);
 }
-
 .node:hover {
-  background: #f0f0f0;
+  background: rgba(255,255,255,0.1);
 }
-
-.manageBtn {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  margin-left: 0.5rem;
-  cursor: pointer;
-}
-
-/* Optional: highlight parent-child visually via padding/color */
 .sublist .node {
   padding-left: 1.5rem;
 }

@@ -1,22 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+.search {
+  padding: 0.75rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+}
+.noResults {
+  color: var(--mutedText);
+  text-align: center;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: var(--gap);
 }
-
 .card {
-  background-color: #fff;
+  background-color: var(--surface);
   padding: var(--gap);
   border-radius: var(--radius);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.2s;
 }
-
 .card:hover {
   transform: translateY(-2px);
+  background: rgba(255,255,255,0.1);
 }
-
 .title {
   font-size: 1rem;
   color: var(--primary);

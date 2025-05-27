@@ -1,46 +1,45 @@
+/* /src/components/SpaceView.module.css */
 .container {
-  background-color: #fff;
+  background-color: var(--surface);
   padding: var(--gap);
   border-radius: var(--radius);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
+  color: var(--text);
 }
-
 .back {
   margin-bottom: var(--gap);
   background: none;
   border: none;
   font-size: 1rem;
+  color: var(--primary);
   cursor: pointer;
 }
-
 .childList {
   margin-bottom: var(--gap);
 }
-
 .childItem {
   padding: 0.5rem;
   cursor: pointer;
   border-radius: var(--radius);
   transition: background 0.2s;
+  color: var(--text);
 }
-
 .childItem:hover {
-  background: #f3f4f6;
+  background: rgba(255,255,255,0.1);
 }
-
 .form {
   display: flex;
   gap: 0.5rem;
   margin-bottom: var(--gap);
 }
-
 .input, .inputDate {
   flex-grow: 1;
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  background: var(--background);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius);
 }
-
 .button {
   padding: 0.5rem 1rem;
   background-color: var(--secondary);
@@ -49,30 +48,27 @@
   border-radius: var(--radius);
   cursor: pointer;
 }
-
 .list {
   list-style: none;
   padding: 0;
 }
-
 .item {
   display: flex;
   justify-content: space-between;
   padding: 0.25rem 0;
+  color: var(--text);
 }
-
 .delete {
   background: none;
   border: none;
   cursor: pointer;
   color: var(--accent);
 }
-
 .group {
   margin-bottom: var(--gap);
 }
-
 .groupTitle {
   font-weight: bold;
   margin-bottom: 0.5rem;
+  color: var(--primary);
 }
